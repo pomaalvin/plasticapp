@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "126412727905",
+    "firebase_url": "https://prueba-del-login.firebaseio.com",
+    "project_id": "prueba-del-login",
+    "storage_bucket": "prueba-del-login.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:126412727905:android:ddcfd61801568a0d",
+        "android_client_info": {
+          "package_name": "com.kevinlogin.flutter_pruebacorrido"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "126412727905-gtgm9stv2tdq9j685ebco3dpkhcv359f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKZjnxP_6IiYMzYNXUmdgXCsy5k7H58n8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "126412727905-gtgm9stv2tdq9j685ebco3dpkhcv359f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
