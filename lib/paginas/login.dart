@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plasticapp/main.dart';
+import 'package:firebase_auth/firebase_auth.dart';
  class inicio extends StatefulWidget
  {
   @override
@@ -7,7 +8,28 @@ import 'package:plasticapp/main.dart';
   }
 
   class _inicioState extends State<inicio>{
-
+    Future<void> signIn() async {
+      final formState = my_key.currentState;
+      if(formState.validate()){
+      formState.save();
+      try{
+      FirebaseUser user = await FirebaseAuth.instance.signInWithEmailAndPassword(email: usuario_editing.text , password: contra_editing.text);
+      Navigator.pushNamed(context, "/menu");
+      }
+      catch(e){
+      return showDialog(
+          context: context,
+        builder: (BuildContext context)
+          {
+            return AlertDialog(
+              backgroundColor: materialcolor1(),
+              content: Text("Usuario o Contraseña\nincorrectos"),
+            );
+          }
+      );
+      }
+      }
+    }
    final contra_editing= TextEditingController();
    final usuario_editing= TextEditingController();
    final my_key=GlobalKey<FormState>();
@@ -114,8 +136,7 @@ import 'package:plasticapp/main.dart';
                             child: Text("Login"),
                             onPressed: ()
                             {
-                              if(my_key.currentState.validate()){
-                                Navigator.pushNamed(context, "/menu");}
+                              signIn();
                             },
                             color: materialcolor1(),
                           ),]
