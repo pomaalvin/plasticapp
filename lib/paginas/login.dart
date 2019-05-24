@@ -7,6 +7,7 @@ import 'package:plasticapp/main.dart';
   }
 
   class _inicioState extends State<inicio>{
+
    final contra_editing= TextEditingController();
    final usuario_editing= TextEditingController();
    final my_key=GlobalKey<FormState>();
@@ -132,6 +133,7 @@ import 'package:plasticapp/main.dart';
   }
 
   }
+
   class registro extends StatelessWidget
   {
     @override
