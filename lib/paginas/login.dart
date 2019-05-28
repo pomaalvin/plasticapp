@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:plasticapp/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import './menu.dart';
  class inicio extends StatefulWidget
  {
   @override
@@ -8,13 +9,17 @@ import 'package:firebase_auth/firebase_auth.dart';
   }
 
   class _inicioState extends State<inicio>{
+    final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
     Future<void> signIn() async {
       final formState = my_key.currentState;
       if(formState.validate()){
       formState.save();
       try{
       FirebaseUser user = await FirebaseAuth.instance.signInWithEmailAndPassword(email: usuario_editing.text , password: contra_editing.text);
-      Navigator.pushNamed(context, "/menu");
+      Navigator.push(context,new MaterialPageRoute(builder: (BuildContext context)=>new menu(usuario_editing.text) ));
+
+
       }
       catch(e){
       return showDialog(
@@ -23,7 +28,7 @@ import 'package:firebase_auth/firebase_auth.dart';
           {
             return AlertDialog(
               backgroundColor: materialcolor1(),
-              content: Text("Usuario o Contraseña\nincorrectos"),
+              content: Text(e.toString()),
             );
           }
       );
@@ -33,11 +38,12 @@ import 'package:firebase_auth/firebase_auth.dart';
    final contra_editing= TextEditingController();
    final usuario_editing= TextEditingController();
    final my_key=GlobalKey<FormState>();
-    @override
+     @override
     String _email;
     String _password;
     Widget build(BuildContext context) {
     return  Scaffold(
+      key: _scaffoldKey,
       body:
       new Form(
         key: my_key,
@@ -57,7 +63,7 @@ import 'package:firebase_auth/firebase_auth.dart';
                       Padding(
                           padding: EdgeInsets.only(left: 45),
                           child: new Row(
-                              children: <Widget>[Text("Nombre de Usuario:",style: TextStyle(color: materialcolor2()),),]
+                              children: <Widget>[Text("Correo Electronico:",style: TextStyle(color: materialcolor2()),),]
                           )
                       ),
                       Padding(
@@ -72,12 +78,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 
                               child: TextFormField(
                                 controller: usuario_editing,
-                                decoration: InputDecoration(errorStyle: TextStyle(color: materialcolor1()),border: InputBorder.none,filled: false,contentPadding: EdgeInsets.only(top:10,bottom: 10,left: 50),focusedBorder: UnderlineInputBorder(borderSide: BorderSide(width: 0,color: Colors.white))),
-                                
+                                decoration: InputDecoration(errorStyle: TextStyle(color: materialcolor1()),border: InputBorder.none,filled: false,contentPadding: EdgeInsets.only(top:10,bottom: 10,left: 20),focusedBorder: UnderlineInputBorder(borderSide: BorderSide(width: 0,color: Colors.white))),
                                 validator: (value)
                                 {
                                   if(value.isEmpty)
-                                    return "Ingrese un nombre de usuario";
+                                    return "Ingrese un email";
                                 },
                               ),
 
@@ -102,8 +107,9 @@ import 'package:firebase_auth/firebase_auth.dart';
                               padding: EdgeInsets.only(left: 0.0),
 
                               child: TextFormField(
-                                decoration: InputDecoration(border: InputBorder.none,errorStyle: TextStyle(color: materialcolor2()),contentPadding: EdgeInsets.only(top:10,bottom: 10,left: 50)),
+                                decoration: InputDecoration(border: InputBorder.none,errorStyle: TextStyle(color: materialcolor2()),contentPadding: EdgeInsets.only(top:10,bottom: 10,left: 20)),
                                 controller: contra_editing,
+                                obscureText: true,
                                 validator: (value)
                                 {
                                   if(value.isEmpty)
@@ -128,7 +134,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
                                 onPressed: ()
                                 {
-                                  Navigator.pushNamed(context, "/registro");
+                                  Navigator.pushNamed(context, "/usuario");
                                 },
                                 color: materialcolor2(),
                               )),
@@ -136,7 +142,25 @@ import 'package:firebase_auth/firebase_auth.dart';
                             child: Text("Login"),
                             onPressed: ()
                             {
-                              signIn();
+                              if(my_key.currentState.validate())
+                                {
+                                  _scaffoldKey.currentState.showSnackBar(
+                                      new SnackBar(duration: new Duration(seconds: 4), content:
+
+                                      new Container(
+                                        height: 35,
+                                        child: Row(
+                                          children: <Widget>[
+                                            new CircularProgressIndicator(),
+                                            VerticalDivider(),
+                                            new Text("Cargando.....")
+                                          ],
+                                        ),
+                                      )
+                                      ));
+                                  signIn();
+
+                                }
                             },
                             color: materialcolor1(),
                           ),]

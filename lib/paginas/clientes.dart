@@ -5,60 +5,42 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
-class nuevos extends StatefulWidget
+import 'menu.dart';
+class clientes extends StatefulWidget
 {
   @override
-  State<StatefulWidget> createState() => _nuevosState(userName);
+  State<StatefulWidget> createState() => _clientesState(userName);
   final String userName;
-  nuevos(this.userName);
+  clientes(this.userName);
 }
-class _nuevosState extends State<nuevos>
+class _clientesState extends State<clientes>
 {
   String email;
   @override
-  _nuevosState(String email)
+  _clientesState(String email)
   {
     this.email=email;
   }
 
   final nombreControl= TextEditingController();
   final empControl= TextEditingController();
-  final descripControl= TextEditingController();
-  final cantiControl= TextEditingController();
-  final precioControl= TextEditingController();
+  final direccionControl= TextEditingController();
+  final telControl= TextEditingController();
   final Global_key= GlobalKey<FormState>();
   File image_mostrar;
   String nombre;
   String URL;
-  Future image() async
-  {
-    File img=await ImagePicker.pickImage(source: ImageSource.camera);
-    print(basename(img.path));
-
-    setState(() {
-
-      image_mostrar=img;
-      nombre=basename(img.path);
-    });
-  }
 
   Future<String> sacarUrl(context) async{
-    StorageReference ref= FirebaseStorage.instance.ref().child(nombre);
-    StorageUploadTask uploadTask= ref.putFile(image_mostrar);
-    var downurl= await(await uploadTask.onComplete).ref.getDownloadURL();
-    URL=downurl.toString();
     Firestore.instance
-        .collection('productos')
+        .collection('clientes')
         .add({
       'Nombre': nombreControl.text,
       'Empresa': empControl.text,
-      'Descripcion': descripControl.text,
-      'Cantidad': cantiControl.text,
-      'imagen':URL,
-      'Precio':precioControl.text,
+      'Direccion': direccionControl.text,
+      'Telefono': telControl.text,
 
     });
-    print(downurl.toString());
     return showDialog(
         context: context,
         builder: (BuildContext context)
@@ -71,13 +53,13 @@ class _nuevosState extends State<nuevos>
                 height: 120,
                 child: Column(
                   children: <Widget>[
-                    Text("Producto añadido Correctamente"),
+                    Text("Cliente añadido Correctamente"),
                     Divider(color: Colors.transparent,),
                     MaterialButton(
                       child: Text("Aceptar"),
                       onPressed: ()
                       {
-                        Navigator.pushNamed(context,"/menu");
+                        Navigator.push(context,new MaterialPageRoute(builder: (BuildContext context)=>new menu(email) ));
                       },
                     )
                   ],
@@ -107,55 +89,38 @@ class _nuevosState extends State<nuevos>
 
             children: <Widget>[
               Divider(color:  Colors.transparent,height: 50,),
-              Row(
+              Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  MaterialButton(
-                    child: Material(
-                      elevation: 10,
-                      child: Container(
-                        padding: EdgeInsets.all(0),
-
-                        width: width*0.4,
-                        height: width*0.4,
-                        child: image_mostrar==null? Image.asset("assets/default_image.png",):new Image.file(image_mostrar),
-                      ),
-                    ),
-                    onPressed:()
-                    {image();},
-                  )
-                ],
-              ),
-              Divider(color: Colors.transparent,height: 30,),
               Row(
 
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Material(
                     elevation: 10,
-                  child: Container(
-                    color: materialcolor2(),
-                      width: width*0.1,
-                      height: 40,
-                child: Icon(Icons.playlist_add,color: materialcolor1(),)
-                  ),),
-                Material(
-                  elevation: 10,
-                child: Container(
-                  width: width*0.6,
-                    height: 40,
-                color: materialcolor1(),
-                child: TextFormField(
-                  cursorColor: materialcolor2(),
-                  decoration: InputDecoration(hintText:"Nombre",border: InputBorder.none,contentPadding: EdgeInsets.only(top:10,left: 20)),
-                  controller: nombreControl,
-                  validator: (value)
-                  {
-                    if(value.isEmpty)
-                      return "Ingrese un nombre";
-                  },
-                ))),
-              ],
+                    child: Container(
+                        color: materialcolor2(),
+                        width: width*0.1,
+                        height: 40,
+                        child: Icon(Icons.playlist_add,color: materialcolor1(),)
+                    ),),
+                  Material(
+                      elevation: 10,
+                      child: Container(
+                          width: width*0.6,
+                          height: 40,
+                          color: materialcolor1(),
+                          child: TextFormField(
+                            cursorColor: materialcolor2(),
+                            decoration: InputDecoration(hintText:"Nombre",border: InputBorder.none,contentPadding: EdgeInsets.only(top:10,left: 20)),
+                            controller: nombreControl,
+                            validator: (value)
+                            {
+                              if(value.isEmpty)
+                                return "Ingrese un nombre";
+                            },
+                          ))),
+                ],
               ),
               Divider(color: Colors.transparent,height: 30,),
               Row(
@@ -210,12 +175,12 @@ class _nuevosState extends State<nuevos>
                         color: materialcolor1(),
                         child: TextFormField(
                           cursorColor: materialcolor2(),
-                          decoration: InputDecoration(hintText:"Descripcion",border: InputBorder.none,contentPadding: EdgeInsets.only(top:10,left: 20)),
-                          controller: descripControl,
+                          decoration: InputDecoration(hintText:"Direccion",border: InputBorder.none,contentPadding: EdgeInsets.only(top:10,left: 20)),
+                          controller: direccionControl,
                           validator: (value)
                           {
                             if(value.isEmpty)
-                              return "Ingrese una Descripcion";
+                              return "Ingrese una Direccion";
                           },
                         )),
                   ),
@@ -226,56 +191,29 @@ class _nuevosState extends State<nuevos>
 
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Material(
-                    elevation: 10,
-                  child: Container(
-                      color: materialcolor2(),
-                      width: width*0.1,
-                      height: 40,
-                      child: Icon(Icons.looks_one,color: materialcolor1(),)
-                  ),),
-                  Material(
-                    elevation: 10,
-                    child: Container(
-                        width: width*0.3,
-                        height: 40,
-                        color: materialcolor1(),
-                        child: TextFormField(
-                          cursorColor: materialcolor2(),
-                          decoration: InputDecoration(hintText:"Cantidad",border: InputBorder.none,contentPadding: EdgeInsets.only(top:10,left: 20)),
-                          keyboardType: TextInputType.number,
-                          controller: cantiControl,
-                          validator: (value)
-                          {
-                            if(value.isEmpty)
-                              return "Ingrese una cantidad";
-                          },
-                        )),
-                  ),
-                  VerticalDivider(),
                   Material(
                     elevation: 10,
                     child: Container(
                         color: materialcolor2(),
                         width: width*0.1,
                         height: 40,
-                        child: Icon(Icons.attach_money,color: materialcolor1(),)
+                        child: Icon(Icons.looks_one,color: materialcolor1(),)
                     ),),
                   Material(
                     elevation: 10,
                     child: Container(
-                        width: width*0.3,
+                        width: width*0.6,
                         height: 40,
                         color: materialcolor1(),
                         child: TextFormField(
                           cursorColor: materialcolor2(),
-                          decoration: InputDecoration(hintText:"Precio",border: InputBorder.none,contentPadding: EdgeInsets.only(top:10,left: 20)),
+                          decoration: InputDecoration(hintText:"Telefono",border: InputBorder.none,contentPadding: EdgeInsets.only(top:10,left: 20)),
                           keyboardType: TextInputType.number,
-                          controller: precioControl,
+                          controller: telControl,
                           validator: (value)
                           {
                             if(value.isEmpty)
-                              return "Ingrese una cantidad";
+                              return "Ingrese un Telefono";
                           },
                         )),
                   ),
@@ -286,21 +224,21 @@ class _nuevosState extends State<nuevos>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Material(
-                    elevation: 10,
-                  child: Container(
-                      height: 35,
-                      width: width*0.30,
-                  child: MaterialButton(
-                    color: materialcolor2(),
-                    child: Text("Añadir",style: TextStyle(color: materialcolor1()),),
-                    onPressed: ()
-                    {
+                      elevation: 10,
+                      child: Container(
+                          height: 35,
+                          width: width*0.30,
+                          child: MaterialButton(
+                            color: materialcolor2(),
+                            child: Text("Añadir",style: TextStyle(color: materialcolor1()),),
+                            onPressed: ()
+                            {
 
-                      if(Global_key.currentState.validate()){
-                        sacarUrl(context);
-}
-                    },
-                  )))
+                              if(Global_key.currentState.validate()){
+                                sacarUrl(context);
+                              }
+                            },
+                          )))
                 ],
               )
 
@@ -311,10 +249,10 @@ class _nuevosState extends State<nuevos>
 
             ],
           ),
-        ),
+        ]),
 
       ),
-    );
+    ));
   }
 }
 
