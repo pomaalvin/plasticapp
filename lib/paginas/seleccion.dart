@@ -176,7 +176,7 @@ class _seleccionState extends State<seleccion>
                                                                     builder: (BuildContext context)
                                                                     {
                                                                       return AlertDialog(
-                                                                          title: Text("Exito!!"),
+                                                                          title: Text("Exito!!",style: TextStyle(color: materialcolor1()),),
                                                                           backgroundColor: materialcolor2(),
                                                                           content: Container(
                                                                             height: 120,

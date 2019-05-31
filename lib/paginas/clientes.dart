@@ -47,7 +47,7 @@ class _clientesState extends State<clientes>
         {
           return AlertDialog(
 
-              title: Text("Exito!!"),
+              title: Text("Exito!!",style: TextStyle(color: materialcolor1()),),
               backgroundColor: materialcolor2(),
               content: Container(
                 height: 120,
