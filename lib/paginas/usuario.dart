@@ -56,7 +56,7 @@ class _usuarioState extends State<usuario>
         {
           return AlertDialog(
 
-              title: Text("Exito!!",style: TextStyle(color: materialcolor1()),),
+              title: Text("Exito!!!",style: TextStyle(color: materialcolor1()),),
               backgroundColor: materialcolor2(),
               content: Container(
                 height: 120,
