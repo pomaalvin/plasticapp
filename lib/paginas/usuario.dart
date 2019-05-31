@@ -24,7 +24,7 @@ class _usuarioState extends State<usuario>
   String URL;
   Future image() async
   {
-    File img=await ImagePicker.pickImage(source: ImageSource.camera);
+    File img=await ImagePicker.pickImage(source: ImageSource.camera,maxWidth: 200,maxHeight: 200);
     print(basename(img.path));
 
     setState(() {
@@ -62,13 +62,14 @@ class _usuarioState extends State<usuario>
                 height: 120,
                 child: Column(
                   children: <Widget>[
-                    Text("Usuario añadido Correctamente"),
+                    Text("Usuario añadido Correctamente",style: TextStyle(color: materialcolor1()),),
                     Divider(color: Colors.transparent,),
                     MaterialButton(
+                      color: materialcolor1(),
                       child: Text("Aceptar"),
                       onPressed: ()
                       {
-                        Navigator.pushNamed(context,"/menu");
+                        Navigator.pushNamed(context,"/login");
                       },
                     )
                   ],
